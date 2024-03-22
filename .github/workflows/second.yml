@@ -55,7 +55,7 @@ jobs:
                 failReason="${{ inputs.FAIL_REASON }}"
                 authorSlackId=$(echo '${{ secrets.SLACK_ID_MAPPING_TABLE }}' | jq -r .${{ inputs.LAST_COMMIT_AUTHOR }})
                 jsonPayload=$(jq -n \
-                --argworkflowName "workflowName" \
+                --arg workflowName "workflowName" \
                 --arg lastCommitAuthor "$lastCommitAuthor" \
                 --arg workflowStartTime "$workflowStartTime" \
                 --arg repositoryName "$repositoryName" \
