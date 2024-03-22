@@ -54,7 +54,7 @@ jobs:
                 deploymentStatus="${{ github.event.inputs.DEPLOYMENT_STATUS }}"
                 failReason="${{ github.event.inputs.FAIL_REASON }}"
                 slackIdMappingTable="${{ secrets.SLACK_ID_MAPPING_TABLE }}"
-                jsonPayload=${jq -n \
+                jsonPayload=$(jq -n \
                 --arg lastCommitMessage "$lastCommitMessage" \
                 --arg lastCommitAuthor "$lastCommitAuthor" \
                 --arg lastCommitTimestamp "$lastCommitTimestamp" \
@@ -107,7 +107,7 @@ jobs:
                         ]
                         }
                     ]
-                    }'
+                    }')
                     
 
                 curl -X POST -H 'Content-type: application/json' --data "$jsonPayload" ${{ secrets.SLACK_WEBHOOK_URL }}
