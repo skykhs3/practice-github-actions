@@ -72,7 +72,7 @@ jobs:
                         "type": "section",
                         "text": {
                         "type": "mrkdwn",
-                        "text": ($deploymentStatus + ": " + $branchName + " - <https://github.com/" + $repositoryName + "/actions/runs/" + $githubRunId + "|" + $lastCommitMessage + " #" + $githubRunNumber + ">")
+                        "text": <https://github.com/" + $repositoryName + "/actions/runs/" + $githubRunId + "|" + $lastCommitMessage + " #" + $githubRunNumber + "> "+ $deploymentStatus + " on " + $branchName
                         }
                     }
                     ],
@@ -84,7 +84,7 @@ jobs:
                             "type": "header",
                             "text": {
                             "type": "plain_text",
-                            "text": ($deploymentStatus + ": " + $branchName + $lastCommitMessage + " #" + $githubRunNumber)
+                            "text": $deploymentStatus
                             }
                         },
                         {
@@ -92,7 +92,7 @@ jobs:
                             "fields": [
                             {
                                 "type": "mrkdwn",
-                                "text": ("*Commit Message:*\n" + "<https://github.com/" + $repositoryName + "/actions/runs/" + $githubRunId + "|" + $lastCommitMessage + " #" + $githubRunNumber + ">"),
+                                "text": ("*Run Number:*\n" + "<https://github.com/" + $repositoryName + "/actions/runs/" + $githubRunId + "|" + $lastCommitMessage + " #" + $githubRunNumber + ">"),
                             },
                             {
                                 "type": "mrkdwn",
