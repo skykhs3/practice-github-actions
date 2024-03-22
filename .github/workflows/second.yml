@@ -43,16 +43,16 @@ jobs:
         steps:
             - name: Make payload
               run: |
-                lastCommitMessage="${{ github.inputs.LAST_COMMIT_MESSAGE }}"
-                lastCommitAuthor="${{ github.inputs.LAST_COMMIT_AUTHOR }}"
-                lastCommitTimestamp="${{ github.inputs.LAST_COMMIT_TIMESTAMP }}"
-                repositoryName="${{ github.inputs.REPOSITORY_NAME }}"
-                branchName="${{ github.inputs.BRANCH_NAME }}"
-                githubRunId="${{ github.inputs.GITHUB_RUN_ID }}"
-                githubRunNumber="${{ github.inputs.GITHUB_RUN_NUMBER }}"
-                messageColor="${{ github.inputs.MESSAGE_COLOR }}"
-                deploymentStatus="${{ github.inputs.DEPLOYMENT_STATUS }}"
-                failReason="${{ github.inputs.FAIL_REASON }}"
+                lastCommitMessage="${{ inputs.LAST_COMMIT_MESSAGE }}"
+                lastCommitAuthor="${{ inputs.LAST_COMMIT_AUTHOR }}"
+                lastCommitTimestamp="${{ inputs.LAST_COMMIT_TIMESTAMP }}"
+                repositoryName="${{ inputs.REPOSITORY_NAME }}"
+                branchName="${{ inputs.BRANCH_NAME }}"
+                githubRunId="${{ inputs.GITHUB_RUN_ID }}"
+                githubRunNumber="${{ inputs.GITHUB_RUN_NUMBER }}"
+                messageColor="${{ inputs.MESSAGE_COLOR }}"
+                deploymentStatus="${{ inputs.DEPLOYMENT_STATUS }}"
+                failReason="${{ inputs.FAIL_REASON }}"
                 slackIdMappingTable="${{ secrets.SLACK_ID_MAPPING_TABLE }}"
                 jsonPayload=$(jq -n \
                 --arg lastCommitMessage "$lastCommitMessage" \
