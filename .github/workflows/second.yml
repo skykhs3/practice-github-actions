@@ -92,15 +92,19 @@ jobs:
                             "fields": [
                             {
                                 "type": "mrkdwn",
-                                "text": ("Reasons:\n" + $failReason)
+                                "text": ("*Commit Message:*\n" + $lastCommitMessage)
                             },
                             {
                                 "type": "mrkdwn",
-                                "text": "Pusher:\n<@U06LFE47QUD>"
+                                "text": (*"Reasons:*\n" + $failReason)
                             },
                             {
                                 "type": "mrkdwn",
-                                "text": ("Repository:\n" + $repositoryName + " |\n" + $lastCommitTimestamp)
+                                "text": "*Pusher:*\n<@U01AHAC1HGS>"
+                            },
+                            {
+                                "type": "mrkdwn",
+                                "text": ("*Repository:*\n" + $repositoryName + " |\n" + $lastCommitTimestamp)
                             }
                             ]
                         }
