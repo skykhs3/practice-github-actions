@@ -48,6 +48,7 @@ jobs:
                 lastCommitAuthor="${{ inputs.LAST_COMMIT_AUTHOR }}"
                 repositoryName="${{ inputs.REPOSITORY_NAME }}"
                 branchName="${{ inputs.BRANCH_NAME }}"
+                branchName2=${branchName##*/}
                 githubRunId="${{ inputs.GITHUB_RUN_ID }}"
                 githubRunNumber="${{ inputs.GITHUB_RUN_NUMBER }}"
                 messageColor="${{ inputs.MESSAGE_COLOR }}"
@@ -59,7 +60,7 @@ jobs:
                 --arg lastCommitAuthor "$lastCommitAuthor" \
                 --arg workflowStartTime "$readableWorkflowStartTime" \
                 --arg repositoryName "$repositoryName" \
-                --arg branchName "$branchName" \
+                --arg branchName "$branchName2" \
                 --arg githubRunId "$githubRunId" \
                 --arg githubRunNumber "$githubRunNumber" \
                 --arg messageColor "$messageColor" \
