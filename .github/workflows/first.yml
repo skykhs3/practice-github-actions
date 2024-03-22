@@ -5,7 +5,7 @@ on:
         - main
 jobs:
     first-job:
-        uses: ./.github/actions/second-job
+        uses: ./.github/workflows/second.yml
         secrets:
             SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
             SLACK_ID_MAPPING_TABLE: ${{ secrets.SLACK_ID_MAPPING_TABLE }}
