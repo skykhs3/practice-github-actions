@@ -72,43 +72,43 @@ jobs:
                         "type": "section",
                         "text": {
                         "type": "mrkdwn",
-                        "text": "\$deploymentStatus: \$branchName Deployment - <https://github.com/\($repositoryName)/actions/runs/\($githubRunId)|\($lastCommitMessage) #\($githubRunNumber)>"
+                        "text": ($deploymentStatus + ": " + $branchName + " Deployment - <https://github.com/" + $repositoryName + "/actions/runs/" + $githubRunId + "|" + $lastCommitMessage + " #" + $githubRunNumber + ">")
                         }
                     }
                     ],
                     "attachments": [
-                        {
-                        "color": "\($messageColor)",
+                    {
+                        "color": $messageColor,
                         "blocks": [
-                            {
+                        {
                             "type": "header",
                             "text": {
-                                "type": "plain_text",
-                                "text": "\($deploymentStatus): \($branchName) Deployment"
+                            "type": "plain_text",
+                            "text": ($deploymentStatus + ": " + $branchName + " Deployment")
                             }
-                            },
-                            {
+                        },
+                        {
                             "type": "section",
                             "fields": [
-                                {
+                            {
                                 "type": "mrkdwn",
-                                "text": "Reasons:\n\($failReason)"
-                                },
-                                {
+                                "text": ("Reasons:\n" + $failReason)
+                            },
+                            {
                                 "type": "mrkdwn",
                                 "text": "Pusher:\n<@U06LFE47QUD>"
-                                },
-                                {
+                            },
+                            {
                                 "type": "mrkdwn",
-                                "text": "Repository:\n\($repositoryName) |\n\($lastCommitTimestamp)"
-                                }
-                            ]
+                                "text": ("Repository:\n" + $repositoryName + " |\n" + $lastCommitTimestamp)
                             }
-                        ]
+                            ]
                         }
+                        ]
+                    }
                     ]
-                    }')
-                    
+                }')
+                
                 echo $jsonPayload
                 curl -X POST -H 'Content-type: application/json' --data "$jsonPayload" ${{ secrets.SLACK_WEBHOOK_URL }}
 
