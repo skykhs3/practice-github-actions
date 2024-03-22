@@ -101,7 +101,7 @@ jobs:
                             },
                             {
                                 "type": "mrkdwn",
-                                "text": "*Pusher:*\n<@"+"$authorSlackId"+">"
+                                "text": ("*Pusher:*\n<@" + $authorSlackId + ">")
                             },
                             {
                                 "type": "mrkdwn",
