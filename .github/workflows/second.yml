@@ -46,7 +46,7 @@ jobs:
                 lastCommitMessage="${{ github.event.inputs.LAST_COMMIT_MESSAGE }}"
                 lastCommitAuthor="${{ github.event.inputs.LAST_COMMIT_AUTHOR }}"
                 lastCommitTimestamp="${{ github.event.inputs.LAST_COMMIT_TIMESTAMP }}"
-                repositoryName="${{ github.event.inputs.REPOSITORY_NAME }}"
+                repositoryName "${{ github.event.inputs.REPOSITORY_NAME }}"
                 branchName="${{ github.event.inputs.BRANCH_NAME }}"
                 githubRunId="${{ github.event.inputs.GITHUB_RUN_ID }}"
                 githubRunNumber="${{ github.event.inputs.GITHUB_RUN_NUMBER }}"
@@ -54,66 +54,61 @@ jobs:
                 deploymentStatus="${{ github.event.inputs.DEPLOYMENT_STATUS }}"
                 failReason="${{ github.event.inputs.FAIL_REASON }}"
                 slackIdMappingTable="${{ secrets.SLACK_ID_MAPPING_TABLE }}"
-                jsonPayload=${jq -n\
-                    --arg lastCommitMessage "$lastCommitMessage"\
-                    --arg lastCommitAuthor "$lastCommitAuthor"\
-                    --arg lastCommitTimestamp "$lastCommitTimestamp"\
-                    --arg repositoryName "$repositoryName"\
-                    --arg branchName "$branchName"\
-                    --arg githubRunId "$githubRunId"\
-                    --arg githubRunNumber "$githubRunNumber"\
-                    --arg messageColor "$messageColor"\
-                    --arg deploymentStatus "$deploymentStatus"\
-                    --arg failReason "$failReason"\
-                    --arg slackIdMappingTable "$slackIdMappingTable"\
-                    '{
-                        "blocks": [
-                        {
-                            "type": "section",
-                            "text": {
-                                "type": "mrkdwn",
-                                "text": "$deploymentStaus: $branchName Deployment - <https://github.com/$repositoryName/actions/runs/$githubRunId|$lastCommitMessage #$githubRunNumber>"
-                            }
+                jsonPayload=${jq -n \
+                --arg lastCommitMessage "$lastCommitMessage" \
+                --arg lastCommitAuthor "$lastCommitAuthor" \
+                --arg lastCommitTimestamp "$lastCommitTimestamp" \
+                --arg repositoryName "$repositoryName" \
+                --arg branchName "$branchName" \
+                --arg githubRunId "$githubRunId" \
+                --arg githubRunNumber "$githubRunNumber" \
+                --arg messageColor "$messageColor" \
+                --arg deploymentStatus "$deploymentStatus" \
+                --arg failReason "$failReason" \
+                --arg slackIdMappingTable "$slackIdMappingTable" \
+                '{
+                    "blocks": [
+                    {
+                        "type": "section",
+                        "text": {
+                        "type": "mrkdwn",
+                        "text": "\($deploymentStatus): \($branchName) Deployment - <https://github.com/\($repositoryName)/actions/runs/\($githubRunId)|\($lastCommitMessage) #\($githubRunNumber)>"
                         }
-                        ],
-                        "attachments": [
+                    }
+                    ],
+                    "attachments": [
                         {
-                            "color": "$messageColor",
-                            "blocks": [
+                        "color": "\($messageColor)",
+                        "blocks": [
                             {
-                                "type": "header",
-                                "text": {
+                            "type": "header",
+                            "text": {
                                 "type": "plain_text",
-                                "text": "$deploymentStatus: $branchName Deployment"
-                                }
+                                "text": "\($deploymentStatus): \($branchName) Deployment"
+                            }
                             },
                             {
-                                "type": "section",
-                                "fields": [
+                            "type": "section",
+                            "fields": [
                                 {
-                                    "type": "mrkdwn",
-                                    "text": "$deploymentStaus: $branchName Deployment - <https://github.com/$repositoryName/actions/runs/$githubRunId|$lastCommitMessage #$githubRunNumber>"
+                                "type": "mrkdwn",
+                                "text": "Reasons:\n\($failReason)"
                                 },
                                 {
-                                    "type": "mrkdwn",
-                                    "text": "*Reasons:*\n$failReason"}}"
+                                "type": "mrkdwn",
+                                "text": "Pusher:\n<@U06LFE47QUD>"
                                 },
                                 {
-                                    "type": "mrkdwn",
-                                    "text": "*Pusher:*\n<@U06LFE47QUD>"
-                                },
-                                {
-                                    "type": "mrkdwn",
-                                    "text": "*Repository:*\n$repositoryName |\n$lastCommitTimestamp"}"
+                                "type": "mrkdwn",
+                                "text": "Repository:\n\($repositoryName) |\n\($lastCommitTimestamp)"
                                 }
-                                ]
-                            }
                             ]
-                        }
+                            }
                         ]
-                    }
-                    '
-                }
+                        }
+                    ]
+                    }'
+                    
 
                 curl -X POST -H 'Content-type: application/json' --data "$jsonPayload" ${{ secrets.SLACK_WEBHOOK_URL }}
 
