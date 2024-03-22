@@ -12,7 +12,7 @@ jobs:
         with: 
             LAST_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
             LAST_COMMIT_AUTHOR: ${{ github.event.head_commit.author.name }}
-            LAST_COMMIT_TIMESTAMP: ${{ github.event.head_commit.timestamp }}
+            LAST_COMMIT_TIMESTAMP: ${{github.event.repository.updated_at}}
             REPOSITORY_NAME: ${{ github.repository }}
             BRANCH_NAME: "qa-develop"
             GITHUB_RUN_ID: ${{ github.run_id }}

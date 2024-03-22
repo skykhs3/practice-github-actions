@@ -53,7 +53,8 @@ jobs:
                 messageColor="${{ inputs.MESSAGE_COLOR }}"
                 deploymentStatus="${{ inputs.DEPLOYMENT_STATUS }}"
                 failReason="${{ inputs.FAIL_REASON }}"
-                slackIdMappingTable="${{ secrets.SLACK_ID_MAPPING_TABLE }}"
+
+                authorSlackId=$(echo '${{ secrets.SLACK_ID_MAPPING_TABLE }}' | jq -r .${{ inputs.LAST_COMMIT_AUTHOR }})
                 jsonPayload=$(jq -n \
                 --arg lastCommitMessage "$lastCommitMessage" \
                 --arg lastCommitAuthor "$lastCommitAuthor" \
@@ -65,7 +66,7 @@ jobs:
                 --arg messageColor "$messageColor" \
                 --arg deploymentStatus "$deploymentStatus" \
                 --arg failReason "$failReason" \
-                --arg slackIdMappingTable "$slackIdMappingTable" \
+                --arg authorSlackId "$authorSlackId" \
                 '{
                     "blocks": [
                     {
@@ -92,7 +93,7 @@ jobs:
                             "fields": [
                             {
                                 "type": "mrkdwn",
-                                "text": ("*Commit Message:*\n" + $lastCommitMessage),
+                                "text": ("*Commit Message:*\n" + "<https://github.com/" + $repositoryName + "/actions/runs/" + $githubRunId + "|" + $lastCommitMessage + " #" + $githubRunNumber + ">"),
                             },
                             {
                                 "type": "mrkdwn",
@@ -100,7 +101,7 @@ jobs:
                             },
                             {
                                 "type": "mrkdwn",
-                                "text": "*Pusher:*\n<@U01AHAC1HGS>"
+                                "text": "*Pusher:*\n<@"+"$authorSlackId"+">"
                             },
                             {
                                 "type": "mrkdwn",
