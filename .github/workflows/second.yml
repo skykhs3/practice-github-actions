@@ -57,7 +57,7 @@ jobs:
                 jsonPayload=$(jq -n \
                 --argworkflowName "workflowName" \
                 --arg lastCommitAuthor "$lastCommitAuthor" \
-                --arg readableworkflowStartTime "$readableworkflowStartTime" \
+                --arg workflowStartTime "$workflowStartTime" \
                 --arg repositoryName "$repositoryName" \
                 --arg branchName "$branchName" \
                 --arg githubRunId "$githubRunId" \
@@ -104,7 +104,7 @@ jobs:
                             },
                             {
                                 "type": "mrkdwn",
-                                "text": ("*Repository:*\n" + $repositoryName + " |\n" + $readableworkflowStartTime)
+                                "text": ("*Repository:*\n" + $repositoryName + " |\n" + $workflowStartTime)
                             }
                             ]
                         }
