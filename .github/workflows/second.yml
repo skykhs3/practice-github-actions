@@ -55,6 +55,7 @@ jobs:
                 failReason="${{ inputs.FAIL_REASON }}"
 
                 authorSlackId=$(echo '${{ secrets.SLACK_ID_MAPPING_TABLE }}' | jq -r .${{ inputs.LAST_COMMIT_AUTHOR }})
+                echo "lastCommitMessage: $lastCommitMessage"
                 jsonPayload=$(jq -n \
                 --arg lastCommitMessage "$lastCommitMessage" \
                 --arg lastCommitAuthor "$lastCommitAuthor" \
