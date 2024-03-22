@@ -43,16 +43,16 @@ jobs:
         steps:
             - name: Make payload
               run: |
-                lastCommitMessage="${{ github.event.inputs.LAST_COMMIT_MESSAGE }}"
-                lastCommitAuthor="${{ github.event.inputs.LAST_COMMIT_AUTHOR }}"
-                lastCommitTimestamp="${{ github.event.inputs.LAST_COMMIT_TIMESTAMP }}"
-                repositoryName="${{ github.event.inputs.REPOSITORY_NAME }}"
-                branchName="${{ github.event.inputs.BRANCH_NAME }}"
-                githubRunId="${{ github.event.inputs.GITHUB_RUN_ID }}"
-                githubRunNumber="${{ github.event.inputs.GITHUB_RUN_NUMBER }}"
-                messageColor="${{ github.event.inputs.MESSAGE_COLOR }}"
-                deploymentStatus="${{ github.event.inputs.DEPLOYMENT_STATUS }}"
-                failReason="${{ github.event.inputs.FAIL_REASON }}"
+                lastCommitMessage="${{ github.inputs.LAST_COMMIT_MESSAGE }}"
+                lastCommitAuthor="${{ github.inputs.LAST_COMMIT_AUTHOR }}"
+                lastCommitTimestamp="${{ github.inputs.LAST_COMMIT_TIMESTAMP }}"
+                repositoryName="${{ github.inputs.REPOSITORY_NAME }}"
+                branchName="${{ github.inputs.BRANCH_NAME }}"
+                githubRunId="${{ github.inputs.GITHUB_RUN_ID }}"
+                githubRunNumber="${{ github.inputs.GITHUB_RUN_NUMBER }}"
+                messageColor="${{ github.inputs.MESSAGE_COLOR }}"
+                deploymentStatus="${{ github.inputs.DEPLOYMENT_STATUS }}"
+                failReason="${{ github.inputs.FAIL_REASON }}"
                 slackIdMappingTable="${{ secrets.SLACK_ID_MAPPING_TABLE }}"
                 jsonPayload=$(jq -n \
                 --arg lastCommitMessage "$lastCommitMessage" \
