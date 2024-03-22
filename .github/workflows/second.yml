@@ -96,7 +96,7 @@ jobs:
                             },
                             {
                                 "type": "mrkdwn",
-                                "text": (*"Reasons:*\n" + $failReason)
+                                "text": ("*Reasons:*\n" + $failReason)
                             },
                             {
                                 "type": "mrkdwn",
