@@ -44,9 +44,8 @@ jobs:
             - name: Make payload
               run: |
                 workflowName="${{ inputs.WORKFLOW_NAME }}"
-                readableWorkflowStartTime=$(date -d "${{ inputs.WORKFLOW_START_TIME }}" +'%Y-%m-%d %H:%M:%S')
+                readableWorkflowStartTime=$(date -d @${{ inputs.WORKFLOW_START_TIME }})
                 lastCommitAuthor="${{ inputs.LAST_COMMIT_AUTHOR }}"
-                workflowStartTime="${{ inputs.WORKFLOW_START_TIME }}"
                 repositoryName="${{ inputs.REPOSITORY_NAME }}"
                 branchName="${{ inputs.BRANCH_NAME }}"
                 githubRunId="${{ inputs.GITHUB_RUN_ID }}"
