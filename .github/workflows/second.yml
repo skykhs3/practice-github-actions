@@ -44,6 +44,7 @@ jobs:
             - name: Make payload
               run: |
                 workflowName="${{ inputs.WORKFLOW_NAME }}"
+                readableWorkflowStartTime=$(date -d "${{ inputs.WORKFLOW_START_TIME }}" +'%Y-%m-%d %H:%M:%S')
                 lastCommitAuthor="${{ inputs.LAST_COMMIT_AUTHOR }}"
                 workflowStartTime="${{ inputs.WORKFLOW_START_TIME }}"
                 repositoryName="${{ inputs.REPOSITORY_NAME }}"
@@ -57,7 +58,7 @@ jobs:
                 jsonPayload=$(jq -n \
                 --arg workflowName "$workflowName" \
                 --arg lastCommitAuthor "$lastCommitAuthor" \
-                --arg workflowStartTime "$workflowStartTime" \
+                --arg workflowStartTime "$readableWorkflowStartTime" \
                 --arg repositoryName "$repositoryName" \
                 --arg branchName "$branchName" \
                 --arg githubRunId "$githubRunId" \
