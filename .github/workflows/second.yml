@@ -1,0 +1,120 @@
+name: Second Workflow
+on:
+    workflow_call:
+        secrets:
+            SLACK_WEBHOOK_URL:
+                required: true
+            SLACK_ID_MAPPING_TABLE:
+                required: true
+        inputs:
+            LAST_COMMIT_MESSAGE:
+                required: true
+                type: string
+            LAST_COMMIT_AUTHOR:
+                required: true
+                type: string
+            LAST_COMMIT_TIMESTAMP:
+                required: true
+                type: string
+            REPOSITORY_NAME:
+                required: true
+                type: string
+            BRANCH_NAME:
+                required: true
+                type: string
+            GITHUB_RUN_ID:
+                required: true
+                type: string
+            GITHUB_RUN_NUMBER:
+                required: true
+                type: string
+            MESSAGE_COLOR:
+                required: true
+                type: string
+            DEPLOYMENT_STATUS:
+                type: string
+            FAIL_REASON:
+                required: true
+                type: string
+
+jobs:
+    second-job:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Make payload
+              run: |
+                lastCommitMessage="${{ github.event.inputs.LAST_COMMIT_MESSAGE }}"
+                lastCommitAuthor="${{ github.event.inputs.LAST_COMMIT_AUTHOR }}"
+                lastCommitTimestamp="${{ github.event.inputs.LAST_COMMIT_TIMESTAMP }}"
+                repositoryName="${{ github.event.inputs.REPOSITORY_NAME }}"
+                branchName="${{ github.event.inputs.BRANCH_NAME }}"
+                githubRunId="${{ github.event.inputs.GITHUB_RUN_ID }}"
+                githubRunNumber="${{ github.event.inputs.GITHUB_RUN_NUMBER }}"
+                messageColor="${{ github.event.inputs.MESSAGE_COLOR }}"
+                deploymentStatus="${{ github.event.inputs.DEPLOYMENT_STATUS }}"
+                failReason="${{ github.event.inputs.FAIL_REASON }}"
+                slackIdMappingTable="${{ secrets.SLACK_ID_MAPPING_TABLE }}"
+                jsonPayload=${jq -n\
+                    --arg lastCommitMessage "$lastCommitMessage"\
+                    --arg lastCommitAuthor "$lastCommitAuthor"\
+                    --arg lastCommitTimestamp "$lastCommitTimestamp"\
+                    --arg repositoryName "$repositoryName"\
+                    --arg branchName "$branchName"\
+                    --arg githubRunId "$githubRunId"\
+                    --arg githubRunNumber "$githubRunNumber"\
+                    --arg messageColor "$messageColor"\
+                    --arg deploymentStatus "$deploymentStatus"\
+                    --arg failReason "$failReason"\
+                    --arg slackIdMappingTable "$slackIdMappingTable"\
+                    '{
+                        "blocks": [
+                        {
+                            "type": "section",
+                            "text": {
+                                "type": "mrkdwn",
+                                "text": "$deploymentStaus: $branchName Deployment - <https://github.com/$repositoryName/actions/runs/$githubRunId|$lastCommitMessage #$githubRunNumber>"
+                            }
+                        }
+                        ],
+                        "attachments": [
+                        {
+                            "color": "$messageColor",
+                            "blocks": [
+                            {
+                                "type": "header",
+                                "text": {
+                                "type": "plain_text",
+                                "text": "$deploymentStatus: $branchName Deployment"
+                                }
+                            },
+                            {
+                                "type": "section",
+                                "fields": [
+                                {
+                                    "type": "mrkdwn",
+                                    "text": "$deploymentStaus: $branchName Deployment - <https://github.com/$repositoryName/actions/runs/$githubRunId|$lastCommitMessage #$githubRunNumber>"
+                                },
+                                {
+                                    "type": "mrkdwn",
+                                    "text": "*Reasons:*\n$failReason"}}"
+                                },
+                                {
+                                    "type": "mrkdwn",
+                                    "text": "*Pusher:*\n<@U06LFE47QUD>"
+                                },
+                                {
+                                    "type": "mrkdwn",
+                                    "text": "*Repository:*\n$repositoryName |\n$lastCommitTimestamp"}"
+                                }
+                                ]
+                            }
+                            ]
+                        }
+                        ]
+                    }
+                    '
+                }
+
+                curl -X POST -H 'Content-type: application/json' --data "$jsonPayload" ${{ secrets.SLACK_WEBHOOK_URL }}
+
+
