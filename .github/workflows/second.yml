@@ -7,13 +7,13 @@ on:
             SLACK_ID_MAPPING_TABLE:
                 required: true
         inputs:
-            LAST_COMMIT_MESSAGE:
+            WORKFLOW_NAME:
                 required: true
                 type: string
             LAST_COMMIT_AUTHOR:
                 required: true
                 type: string
-            LAST_COMMIT_TIMESTAMP:
+            PUSHED_AT:
                 required: true
                 type: string
             REPOSITORY_NAME:
@@ -43,9 +43,11 @@ jobs:
         steps:
             - name: Make payload
               run: |
-                lastCommitMessage="${{ inputs.LAST_COMMIT_MESSAGE }}"
+                workflowName="${{ inputs.WORKFLOW_NAME }}"
                 lastCommitAuthor="${{ inputs.LAST_COMMIT_AUTHOR }}"
-                lastCommitTimestamp="${{ inputs.LAST_COMMIT_TIMESTAMP }}"
+                pushedAt="${{ inputs.PUSHED_AT }}"
+                readablePushedAt=$(date -d "@$pushedAt" '+%Y-%m-%d %H:%M:%S')
+
                 repositoryName="${{ inputs.REPOSITORY_NAME }}"
                 branchName="${{ inputs.BRANCH_NAME }}"
                 githubRunId="${{ inputs.GITHUB_RUN_ID }}"
@@ -55,9 +57,9 @@ jobs:
                 failReason="${{ inputs.FAIL_REASON }}"
                 authorSlackId=$(echo '${{ secrets.SLACK_ID_MAPPING_TABLE }}' | jq -r .${{ inputs.LAST_COMMIT_AUTHOR }})
                 jsonPayload=$(jq -n \
-                --arg lastCommitMessage "$lastCommitMessage" \
+                --argworkflowName "workflowName" \
                 --arg lastCommitAuthor "$lastCommitAuthor" \
-                --arg lastCommitTimestamp "$lastCommitTimestamp" \
+                --arg readablePushedAt "$readablePushedAt" \
                 --arg repositoryName "$repositoryName" \
                 --arg branchName "$branchName" \
                 --arg githubRunId "$githubRunId" \
@@ -72,7 +74,7 @@ jobs:
                         "type": "section",
                         "text": {
                         "type": "mrkdwn",
-                        "text": ("<https://github.com/" + $repositoryName + "/actions/runs/" + $githubRunId + "|" + $lastCommitMessage + " #" + $githubRunNumber + "> "+ $deploymentStatus + " on " + $branchName)
+                        "text": ("Github Actions: <https://github.com/" + $repositoryName + "/actions/runs/" + $githubRunId + "|" + workflowName + " #" + $githubRunNumber + "> "+ $deploymentStatus + " on " + $branchName)
                         }
                     }
                     ],
@@ -92,7 +94,7 @@ jobs:
                             "fields": [
                             {
                                 "type": "mrkdwn",
-                                "text": ("*Run Number:*\n" + "<https://github.com/" + $repositoryName + "/actions/runs/" + $githubRunId + "|" + $lastCommitMessage + " #" + $githubRunNumber + ">"),
+                                "text": ("*Run Number:*\n" + "<https://github.com/" + $repositoryName + "/actions/runs/" + $githubRunId + "|" + workflowName + " #" + $githubRunNumber + ">"),
                             },
                             {
                                 "type": "mrkdwn",
@@ -104,7 +106,7 @@ jobs:
                             },
                             {
                                 "type": "mrkdwn",
-                                "text": ("*Repository:*\n" + $repositoryName + " |\n" + $lastCommitTimestamp)
+                                "text": ("*Repository:*\n" + $repositoryName + " |\n" + $readablePushedAt)
                             }
                             ]
                         }
