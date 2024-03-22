@@ -46,7 +46,7 @@ jobs:
                 lastCommitMessage="${{ github.event.inputs.LAST_COMMIT_MESSAGE }}"
                 lastCommitAuthor="${{ github.event.inputs.LAST_COMMIT_AUTHOR }}"
                 lastCommitTimestamp="${{ github.event.inputs.LAST_COMMIT_TIMESTAMP }}"
-                repositoryName "${{ github.event.inputs.REPOSITORY_NAME }}"
+                repositoryName="${{ github.event.inputs.REPOSITORY_NAME }}"
                 branchName="${{ github.event.inputs.BRANCH_NAME }}"
                 githubRunId="${{ github.event.inputs.GITHUB_RUN_ID }}"
                 githubRunNumber="${{ github.event.inputs.GITHUB_RUN_NUMBER }}"
