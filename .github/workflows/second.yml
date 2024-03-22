@@ -92,7 +92,8 @@ jobs:
                             "fields": [
                             {
                                 "type": "mrkdwn",
-                                "text": ("*Commit Message:*\n" + $lastCommitMessage)
+                                "text": ("*Commit Message:*\n" + $lastCommitMessage),
+                                "short": true
                             },
                             {
                                 "type": "mrkdwn",
