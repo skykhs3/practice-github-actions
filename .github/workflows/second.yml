@@ -96,11 +96,11 @@ jobs:
                             },
                             {
                                 "type": "mrkdwn",
-                                "text": ("*Reasons for Failure":*\n" + $failReason)
+                                "text": ("*Reasons for Failure:*\n" + $failReason)
                             },
                             {
                                 "type": "mrkdwn",
-                                "text": ("*Assignee:*\n<@" + $authorSlackId + ">")
+                                "text": ("*Assignee:*\n<" + $authorSlackId + ">")
                             },
                             {
                                 "type": "mrkdwn",
