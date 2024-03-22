@@ -72,7 +72,7 @@ jobs:
                         "type": "section",
                         "text": {
                         "type": "mrkdwn",
-                        "text": ($deploymentStatus + ": " + $branchName + " Deployment - <https://github.com/" + $repositoryName + "/actions/runs/" + $githubRunId + "|" + $lastCommitMessage + " #" + $githubRunNumber + ">")
+                        "text": ($deploymentStatus + ": " + $branchName + $lastCommitMessage + " - <https://github.com/" + $repositoryName + "/actions/runs/" + $githubRunId + "|" + $lastCommitMessage + " #" + $githubRunNumber + ">")
                         }
                     }
                     ],
