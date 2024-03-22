@@ -45,9 +45,7 @@ jobs:
               run: |
                 workflowName="${{ inputs.WORKFLOW_NAME }}"
                 lastCommitAuthor="${{ inputs.LAST_COMMIT_AUTHOR }}"
-                pushedAt="${{ inputs.WORKFLOW_START_TIME }}"
-                readablePushedAt=$(date -d "@$pushedAt" '+%Y-%m-%d %H:%M:%S')
-
+                workflowStartTime="${{ inputs.WORKFLOW_START_TIME }}"
                 repositoryName="${{ inputs.REPOSITORY_NAME }}"
                 branchName="${{ inputs.BRANCH_NAME }}"
                 githubRunId="${{ inputs.GITHUB_RUN_ID }}"
@@ -59,7 +57,7 @@ jobs:
                 jsonPayload=$(jq -n \
                 --argworkflowName "workflowName" \
                 --arg lastCommitAuthor "$lastCommitAuthor" \
-                --arg readablePushedAt "$readablePushedAt" \
+                --arg readableworkflowStartTime "$readableworkflowStartTime" \
                 --arg repositoryName "$repositoryName" \
                 --arg branchName "$branchName" \
                 --arg githubRunId "$githubRunId" \
@@ -106,7 +104,7 @@ jobs:
                             },
                             {
                                 "type": "mrkdwn",
-                                "text": ("*Repository:*\n" + $repositoryName + " |\n" + $readablePushedAt)
+                                "text": ("*Repository:*\n" + $repositoryName + " |\n" + $readableworkflowStartTime)
                             }
                             ]
                         }
