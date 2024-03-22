@@ -92,19 +92,19 @@ jobs:
                             "fields": [
                             {
                                 "type": "mrkdwn",
-                                "text": ("*Run Number:*\n" + "<https://github.com/" + $repositoryName + "/actions/runs/" + $githubRunId + "|" + $workflowName + " #" + $githubRunNumber + ">"),
+                                "text": ("*Workflow:*\n" + "<https://github.com/" + $repositoryName + "/actions/runs/" + $githubRunId + "|" + $workflowName + " #" + $githubRunNumber + ">"),
                             },
                             {
                                 "type": "mrkdwn",
-                                "text": ("*Reasons:*\n" + $failReason)
+                                "text": ("*Reasons for Failure":*\n" + $failReason)
                             },
                             {
                                 "type": "mrkdwn",
-                                "text": ("*Pusher:*\n<@" + $authorSlackId + ">")
+                                "text": ("*Assignee:*\n<@" + $authorSlackId + ">")
                             },
                             {
                                 "type": "mrkdwn",
-                                "text": ("*Repository:*\n" + $repositoryName + " |\n" + $workflowStartTime)
+                                "text": ("*Start time of workflow:*\n" + $workflowStartTime)
                             }
                             ]
                         }
