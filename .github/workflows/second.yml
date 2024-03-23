@@ -7,24 +7,6 @@ on:
             SLACK_ID_MAPPING_TABLE:
                 required: true
         inputs:
-            WORKFLOW_NAME:
-                required: true
-                type: string
-            LAST_COMMIT_AUTHOR:
-                required: true
-                type: string
-            LAST_COMMIT_MESSAGE:
-                required: true
-                type: string
-            LAST_COMMIT_ID:
-                required: true
-                type: string
-            WORKFLOW_START_TIME:
-                required: true
-                type: string
-            REPOSITORY_NAME:
-                required: true
-                type: string
             BRANCH_NAME:
                 required: true
                 type: string
@@ -34,52 +16,68 @@ on:
             GITHUB_RUN_NUMBER:
                 required: true
                 type: string
-            MESSAGE_COLOR:
+            LAST_COMMIT_AUTHOR:
+                required: true
                 type: string
-                default: "#000000"
+            LAST_COMMIT_ID:
+                required: true
+                type: string
+            LAST_COMMIT_MESSAGE:
+                required: true
+                type: string
+            REPOSITORY_NAME:
+                required: true
+                type: string
+            WORKFLOW_NAME:
+                required: true
+                type: string
+            WORKFLOW_START_TIME:
+                required: true
+                type: string
             DEPLOYMENT_STATUS:
                 type: string
                 default: "Failed"
             FAIL_REASON:
                 type: string
                 default: "unknown error"
-
+            MESSAGE_COLOR:
+                type: string
+                default: "#CB2431"
 jobs:
     send-messages-to-slack:
         runs-on: ubuntu-latest
         steps:
             - name: Create json payload and send it to slack
-              run: |
-                workflowName="${{ inputs.WORKFLOW_NAME }}"
-                readableWorkflowStartTime=$(TZ='Asia/Seoul' date -d @${{ inputs.WORKFLOW_START_TIME }} '+%Y-%m-%d %H:%M:%S')
-                lastCommitAuthor="${{ inputs.LAST_COMMIT_AUTHOR }}"
-                lastCommitMessage=$(jq -n --arg lcm "${{ inputs.LAST_COMMIT_MESSAGE }}" '($lcm)')
-                lastCommitMessage="${lastCommitMessage:1:-1}"
-                lastCommitId="${{ inputs.LAST_COMMIT_ID }}"
-                repositoryName="${{ inputs.REPOSITORY_NAME }}"
+              run: |     
                 branchName="${{ inputs.BRANCH_NAME }}"
                 githubRunId="${{ inputs.GITHUB_RUN_ID }}"
                 githubRunNumber="${{ inputs.GITHUB_RUN_NUMBER }}"
-                messageColor="${{ inputs.MESSAGE_COLOR }}"
+                lastCommitAuthor="${{ inputs.LAST_COMMIT_AUTHOR }}"
+                lastCommitId="${{ inputs.LAST_COMMIT_ID }}"
+
+                # Escape processing
+                lastCommitMessage=$(jq -n --arg lcm "${{ inputs.LAST_COMMIT_MESSAGE }}" '($lcm)')
+                lastCommitMessage="${lastCommitMessage:1:-1}"  
+
+                repositoryName="${{ inputs.REPOSITORY_NAME }}"
+                workflowName="${{ inputs.WORKFLOW_NAME }}"
+                readableWorkflowStartTime=$(TZ='Asia/Seoul' date -d @${{ inputs.WORKFLOW_START_TIME }} '+%Y-%m-%d %H:%M:%S')
                 deploymentStatus="${{ inputs.DEPLOYMENT_STATUS }}"
                 failReason="${{ inputs.FAIL_REASON }}"
-
-                # Your slack id mapping table should be in Github secrets
+                messageColor="${{ inputs.MESSAGE_COLOR }}"
                 authorSlackId=$(echo '${{ secrets.SLACK_ID_MAPPING_TABLE }}' | jq -r --arg key "$lastCommitAuthor" '.[$key] // $key')
 
                 jsonPayload=$(jq -n \
-                --arg workflowNameLink "<https://github.com/$repositoryName/actions/runs/$githubRunId|$workflowName #$githubRunNumber>" \
-                --arg lastCommitAuthor "$lastCommitAuthor" \
-                --arg lastCommitMessageLink "<https://github.com/$repositoryName/commit/$lastCommitId|$lastCommitMessage>" \
-                --arg lastCommitId "$lastCommitId" \
-                --arg workflowStartTime "$readableWorkflowStartTime" \
-                --arg repositoryName "$repositoryName" \
                 --arg branchName "$branchName" \
                 --arg githubRunId "$githubRunId" \
                 --arg githubRunNumber "$githubRunNumber" \
-                --arg messageColor "$messageColor" \
+                --arg lastCommitMessageLink "<https://github.com/$repositoryName/commit/$lastCommitId|$lastCommitMessage>" \
+                --arg repositoryName "$repositoryName" \
+                --arg workflowNameLink "<https://github.com/$repositoryName/actions/runs/$githubRunId|$workflowName #$githubRunNumber>" \
+                --arg workflowStartTime "$readableWorkflowStartTime" \
                 --arg deploymentStatus "$deploymentStatus" \
                 --arg failReason "$failReason" \
+                --arg messageColor "$messageColor" \
                 --arg authorSlackId "$authorSlackId" \
                 '{
                     "blocks": [
