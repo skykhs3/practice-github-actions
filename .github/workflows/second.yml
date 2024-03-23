@@ -47,8 +47,7 @@ jobs:
     send-messages-to-slack:
         runs-on: ubuntu-latest
         steps:
-            - name: Create json payload and send it to slack
-              run: |     
+            - run: |     
                 branchName="${{ inputs.BRANCH_NAME }}"
                 githubRunId="${{ inputs.GITHUB_RUN_ID }}"
                 githubRunNumber="${{ inputs.GITHUB_RUN_NUMBER }}"

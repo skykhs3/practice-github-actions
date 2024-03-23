@@ -5,6 +5,26 @@ on:
         - main
 jobs:
     first-job:
+        runs-on: ubuntu-latest
+        steps:
+            - run: |
+                echo "this is first-job"
+    second-job:
+        needs: first-job
+        runs-on: ubuntu-latest
+        steps:
+            - run: |
+                echo "this is third-job"
+                exit 1
+    third-job:
+        needs: second-job
+        runs-on: ubuntu-latest
+        steps:
+            - run: |
+                echo "this is fourth-job"
+
+    success-slack-message:
+        needs: [first-job,second-job,third-job]
         uses: ./.github/workflows/second.yml
         secrets:
             SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -22,26 +42,26 @@ jobs:
             DEPLOYMENT_STATUS: "Succeeded"
             FAIL_REASON: "N/A"
             MESSAGE_COLOR: "#28A745"
-            
-    third-job:
-        needs: first-job
-        runs-on: ubuntu-latest
-        steps:
-            - run: |
-                echo "this is third-job"
-                exit 1
-    fourth-job:
-        needs: third-job
-        runs-on: ubuntu-latest
-        steps:
-            - run: |
-                echo "this is fourth-job"
-    catch-error:
-        needs: [first-job,third-job,fourth-job]
+
+    failure-slack-message:
+        needs: [first-job,second-job,third-job]
         if: ${{ failure() }}
-        runs-on: ubuntu-latest
-        steps:
-            - run: |
-                echo "catch error"
+        uses: ./.github/workflows/second.yml
+        secrets:
+            SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+            SLACK_ID_MAPPING_TABLE: ${{ secrets.SLACK_ID_MAPPING_TABLE_FOR_QA }}
+        with: 
+            BRANCH_NAME: ${{ github.ref_name }}
+            GITHUB_RUN_ID: ${{ github.run_id }}
+            GITHUB_RUN_NUMBER: ${{ github.run_number }}
+            LAST_COMMIT_AUTHOR: ${{ github.event.head_commit.author.name }}
+            LAST_COMMIT_ID: ${{github.event.head_commit.id}}
+            LAST_COMMIT_MESSAGE: ${{github.event.head_commit.message}}
+            REPOSITORY_NAME: ${{ github.repository }}
+            WORKFLOW_START_TIME: ${{github.event.repository.pushed_at}}
+            WORKFLOW_NAME: ${{ github.workflow }}
+            DEPLOYMENT_STATUS: "Failed"
+            FAIL_REASON: "Unknown"
+            MESSAGE_COLOR: "#CB2431"
 
 
