@@ -54,6 +54,8 @@ jobs:
                 messageColor="${{ inputs.MESSAGE_COLOR }}"
                 deploymentStatus="${{ inputs.DEPLOYMENT_STATUS }}"
                 failReason="${{ inputs.FAIL_REASON }}"
+
+                # your comment
                 authorSlackId=$(echo '${{ secrets.SLACK_ID_MAPPING_TABLE }}' | jq -r .${{ inputs.LAST_COMMIT_AUTHOR }})
                 jsonPayload=$(jq -n \
                 --arg workflowName "$workflowName" \
