@@ -53,7 +53,7 @@ jobs:
 
                 lastCommitMessage=$(jq -n \
                     --arg cm "${{ inputs.LAST_COMMIT_MESSAGE }}" \
-                    '($cm)')
+                    '($cm) | .[1:-1]')
 
                 repositoryName="${{ inputs.REPOSITORY_NAME }}"
                 branchName="${{ inputs.BRANCH_NAME }}"
@@ -108,10 +108,6 @@ jobs:
                             {
                                 "type": "mrkdwn",
                                 "text": ("*Workflow:*\n" + "<https://github.com/" + $repositoryName + "/actions/runs/" + $githubRunId + "|" + $workflowName + " #" + $githubRunNumber + ">"),
-                            },
-                            {
-                                "type": "mrkdwn",
-                                "text": ("*Reasons for Failure:*\n" + $failReason)
                             },
                             {
                                 "type": "mrkdwn",
