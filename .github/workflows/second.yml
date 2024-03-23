@@ -83,6 +83,7 @@ jobs:
                 --arg workflowName "$workflowName" \
                 --arg lastCommitAuthor "$lastCommitAuthor" \
                 --arg lastCommitMessage "$lastCommitMessage" \
+                --arg lastCommitId "$lastCommitId" \
                 --arg workflowStartTime "$readableWorkflowStartTime" \
                 --arg repositoryName "$repositoryName" \
                 --arg branchName "$branchName" \
