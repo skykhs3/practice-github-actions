@@ -9,7 +9,7 @@ jobs:
         steps:
             - run: |
                 echo "this is first-job"
-                exit 1
+                exit 0
         outputs:
             failure-reasons: "because of first-job error"
     second-job:
@@ -18,7 +18,7 @@ jobs:
         steps:
             - run: |
                 echo "this is third-job"
-                exit 1
+                exit 0
         outputs:
             failure-reasons: "because of second-job error"
     third-job:
