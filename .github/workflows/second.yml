@@ -37,9 +37,9 @@ on:
             DEPLOYMENT_STATUS:
                 type: string
                 default: "Failed"
-            FAIL_REASON:
+            FAIL_REASONS:
                 type: string
-                default: "unknown error"
+                default: ""
             MESSAGE_COLOR:
                 type: string
                 default: "#CB2431"
@@ -48,7 +48,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - run: |    
-                echo "${{inputs.FAIL_REASON}}" 
+                echo "${{inputs.FAIL_REASONS}}" 
                 branchName="${{ inputs.BRANCH_NAME }}"
                 githubRunId="${{ inputs.GITHUB_RUN_ID }}"
                 githubRunNumber="${{ inputs.GITHUB_RUN_NUMBER }}"
@@ -63,7 +63,7 @@ jobs:
                 workflowName="${{ inputs.WORKFLOW_NAME }}"
                 readableWorkflowStartTime=$(TZ='Asia/Seoul' date -d @${{ inputs.WORKFLOW_START_TIME }} '+%Y-%m-%d %H:%M:%S')
                 deploymentStatus="${{ inputs.DEPLOYMENT_STATUS }}"
-                failReason="${{ inputs.FAIL_REASON }}"
+                failReasons="${{ inputs.FAIL_REASONS }}"
                 messageColor="${{ inputs.MESSAGE_COLOR }}"
                 authorSlackId=$(echo '${{ secrets.SLACK_ID_MAPPING_TABLE }}' | jq -r --arg key "$lastCommitAuthor" '.[$key] // $key')
 
@@ -76,7 +76,7 @@ jobs:
                 --arg workflowNameLink "<https://github.com/$repositoryName/actions/runs/$githubRunId|$workflowName #$githubRunNumber>" \
                 --arg workflowStartTime "$readableWorkflowStartTime" \
                 --arg deploymentStatus "$deploymentStatus" \
-                --arg failReason "$failReason" \
+                --arg failReasons "$failReasons" \
                 --arg messageColor "$messageColor" \
                 --arg authorSlackId "$authorSlackId" \
                 '{
@@ -105,7 +105,7 @@ jobs:
                             "fields": [
                             {
                                 "type": "mrkdwn",
-                                "text": ("*Workflow:*\n" + $workflowNameLink),
+                                "text": ("*Workflow:*\n" + $workflowNameLink + "\n" + $failReasons),
                             },
                             {
                                 "type": "mrkdwn",

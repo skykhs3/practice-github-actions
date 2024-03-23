@@ -64,7 +64,7 @@ jobs:
             WORKFLOW_START_TIME: ${{github.event.repository.pushed_at}}
             WORKFLOW_NAME: ${{ github.workflow }}
             DEPLOYMENT_STATUS: "Failed"
-            FAIL_REASON: ${{needs.second-job.outputs.failure-reasons}}
+            FAIL_REASONS: ${{needs.second-job.outputs.failure-reasons}}
             MESSAGE_COLOR: "#CB2431"
 
 
