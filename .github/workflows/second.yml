@@ -16,6 +16,9 @@ on:
             LAST_COMMIT_MESSAGE:
                 required: true
                 type: string
+            LAST_COMMIT_ID:
+                required: true
+                type: string
             WORKFLOW_START_TIME:
                 required: true
                 type: string
@@ -45,7 +48,7 @@ jobs:
     send-messages-to-slack:
         runs-on: ubuntu-latest
         steps:
-            - name: Make payload and send
+            - name: Create json payload and send it to slack
               run: |
                 workflowName="${{ inputs.WORKFLOW_NAME }}"
 
@@ -57,6 +60,8 @@ jobs:
                     --arg lcm "${{ inputs.LAST_COMMIT_MESSAGE }}" \
                     '($lcm)')
                 lastCommitMessage="${lastCommitMessage:1:-1}"
+
+                lastCommitId="${{ inputs.LAST_COMMIT_ID }}"
 
                 repositoryName="${{ inputs.REPOSITORY_NAME }}"
                 branchName="${{ inputs.BRANCH_NAME }}"
@@ -117,7 +122,7 @@ jobs:
                             },
                             {
                                 "type": "mrkdwn",
-                                "text": ("*Last commit message:*\n" + $lastCommitMessage)
+                                "text": ("*Last commit message:*\n" + "<https://github.com/" + $repositoryName + "/commit/"+ $lastCommitId +"|" +$lastCommitMessage + ">")
                             },
                             {
                                 "type": "mrkdwn",
