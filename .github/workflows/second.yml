@@ -85,7 +85,7 @@ jobs:
                         "type": "section",
                         "text": {
                         "type": "mrkdwn",
-                        "text": ("Github Actions: " + $workflowNameLink + " " + $deploymentStatus + " on " + $branchName + $failReasons)
+                        "text": ("Github Actions: " + $workflowNameLink + " " + $deploymentStatus + " on " + $branchName + " " + $failReasons)
                         }
                     }
                     ],
@@ -97,7 +97,7 @@ jobs:
                             "type": "header",
                             "text": {
                             "type": "plain_text",
-                            "text": ($deploymentStatus + $failReasons)
+                            "text": ($deploymentStatus + " " + $failReasons)
                             }
                         },
                         {
