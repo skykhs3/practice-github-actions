@@ -54,9 +54,7 @@ jobs:
                 messageColor="${{ inputs.MESSAGE_COLOR }}"
                 deploymentStatus="${{ inputs.DEPLOYMENT_STATUS }}"
                 failReason="${{ inputs.FAIL_REASON }}"
-                
-                # Your slack_id should be added in Github Secrets
-                authorSlackId=$(echo '${{ secrets.SLACK_ID_MAPPING_TABLE }}' | jq -r .${{ inputs.LAST_COMMIT_AUTHOR }} // "${{inputs.LAST_COMMIT_AUTHOR}}")
+                authorSlackId=$(echo '${{ secrets.SLACK_ID_MAPPING_TABLE }}' | jq -r .${{ inputs.LAST_COMMIT_AUTHOR }})
                 jsonPayload=$(jq -n \
                 --arg workflowName "$workflowName" \
                 --arg lastCommitAuthor "$lastCommitAuthor" \
