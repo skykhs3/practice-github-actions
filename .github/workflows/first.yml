@@ -9,6 +9,7 @@ jobs:
         steps:
             - run: |
                 echo "this is first-job"
+                exit 1
         outputs:
             failure-reasons: "because of first-job error"
     second-job:
@@ -68,7 +69,7 @@ jobs:
             WORKFLOW_START_TIME: ${{github.event.repository.pushed_at}}
             WORKFLOW_NAME: ${{ github.workflow }}
             DEPLOYMENT_STATUS: "Failed"
-            FAIL_REASONS: ${{needs.second-job.outputs.failure-reasons}}
+            FAIL_REASONS: (${{needs.first-job.outputs.failure-reasons}}+${{needs.second-job.outputs.failure-reasons}}+${{needs.third-job.outputs.failure-reasons}})
             MESSAGE_COLOR: "#CB2431"
 
 
