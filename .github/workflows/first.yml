@@ -16,6 +16,8 @@ jobs:
             - run: |
                 echo "this is third-job"
                 exit 1
+        outputs:
+            failure-reasons: "job1에서 실패했습니다."
     third-job:
         needs: second-job
         runs-on: ubuntu-latest
@@ -46,6 +48,7 @@ jobs:
     failure-slack-message:
         needs: [first-job,second-job,third-job]
         if: ${{ failure() }}
+        
         uses: ./.github/workflows/second.yml
         secrets:
             SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -61,7 +64,7 @@ jobs:
             WORKFLOW_START_TIME: ${{github.event.repository.pushed_at}}
             WORKFLOW_NAME: ${{ github.workflow }}
             DEPLOYMENT_STATUS: "Failed"
-            FAIL_REASON: "Unknown"
+            FAIL_REASON: needs.first-job.outputs.failure-reasons
             MESSAGE_COLOR: "#CB2431"
 
 

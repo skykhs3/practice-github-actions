@@ -47,7 +47,8 @@ jobs:
     send-messages-to-slack:
         runs-on: ubuntu-latest
         steps:
-            - run: |     
+            - run: |    
+                echo "${{inputs.FAIL_REASON}}" 
                 branchName="${{ inputs.BRANCH_NAME }}"
                 githubRunId="${{ inputs.GITHUB_RUN_ID }}"
                 githubRunNumber="${{ inputs.GITHUB_RUN_NUMBER }}"
