@@ -17,7 +17,7 @@ jobs:
                 echo "this is third-job"
                 exit 1
         outputs:
-            failure-reasons: "Because of ${{github.jobs[github.job]}}"
+            failure-reasons: "Because of ${{job.container.id}}"
     third-job:
         needs: second-job
         runs-on: ubuntu-latest
