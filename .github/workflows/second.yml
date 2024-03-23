@@ -54,8 +54,9 @@ jobs:
                 lastCommitAuthor="${{ inputs.LAST_COMMIT_AUTHOR }}"
 
                 lastCommitMessage=$(jq -n \
-                    --arg cm "${{ inputs.LAST_COMMIT_MESSAGE }}" \
-                    '($cm)')
+                    --arg lcm "${{ inputs.LAST_COMMIT_MESSAGE }}" \
+                    '($lcm)')
+                lastCommitMessage="${lastCommitMessage:1:-1}"
 
                 repositoryName="${{ inputs.REPOSITORY_NAME }}"
                 branchName="${{ inputs.BRANCH_NAME }}"
@@ -72,7 +73,7 @@ jobs:
                 fi
 
                 echo "authorSlackId: $lastCommitMessage"
-                
+
                 jsonPayload=$(jq -n \
                 --arg workflowName "$workflowName" \
                 --arg lastCommitAuthor "$lastCommitAuthor" \
