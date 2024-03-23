@@ -20,3 +20,24 @@ jobs:
             MESSAGE_COLOR: "#FFFFFF"
             DEPLOYMENT_STATUS: "Succeeded"
             FAIL_REASON: "N/A"
+    third-job:
+        needs: first-job
+        runs-on: ubuntu-lasted
+        steps:
+            - run: |
+                echo "this is third-job"
+    fourth-job:
+        needs: third-job
+        runs-on: ubuntu-lasted
+        steps:
+            - run: |
+                echo "this is fourth-job"
+    catch-error:
+        needs: [first-job,third-job,fourth-job]
+        if: ${{ failure() }}
+        runs-on: ubuntu-lasted
+        steps:
+            - run: |
+                echo "catch error"
+
+
