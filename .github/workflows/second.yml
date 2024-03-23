@@ -29,13 +29,14 @@ on:
                 required: true
                 type: string
             MESSAGE_COLOR:
-                required: true
                 type: string
+                default: "#000000"
             DEPLOYMENT_STATUS:
                 type: string
+                default: "Failed"
             FAIL_REASON:
-                required: true
                 type: string
+                default: "unknown error"
 
 jobs:
     send-messages-to-slack:
