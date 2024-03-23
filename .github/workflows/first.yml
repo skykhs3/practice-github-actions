@@ -17,7 +17,7 @@ jobs:
                 echo "this is third-job"
                 exit 1
         outputs:
-            failure-reasons: "job1에서 실패했습니다."
+            failure-reasons: "job2에서 실패했습니다."
     third-job:
         needs: second-job
         runs-on: ubuntu-latest
@@ -64,7 +64,7 @@ jobs:
             WORKFLOW_START_TIME: ${{github.event.repository.pushed_at}}
             WORKFLOW_NAME: ${{ github.workflow }}
             DEPLOYMENT_STATUS: "Failed"
-            FAIL_REASON: needs.first-job.outputs.failure-reasons
+            FAIL_REASON: ${{needs.second-job.outputs.failure-reasons}}
             MESSAGE_COLOR: "#CB2431"
 
 
