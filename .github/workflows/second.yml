@@ -48,7 +48,6 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - run: |    
-                echo "${{inputs.FAIL_REASONS}}" 
                 branchName="${{ inputs.BRANCH_NAME }}"
                 githubRunId="${{ inputs.GITHUB_RUN_ID }}"
                 githubRunNumber="${{ inputs.GITHUB_RUN_NUMBER }}"
@@ -105,19 +104,19 @@ jobs:
                             "fields": [
                             {
                                 "type": "mrkdwn",
-                                "text": ("*Workflow:*\n" + $workflowNameLink + "\n"),
+                                "text": ("*Workflow:*\n" + $workflowNameLink + "\n "),
                             },
                             {
                                 "type": "mrkdwn",
-                                "text": ("*Last commit message:*\n" + $lastCommitMessageLink + "\n")
+                                "text": ("*Last commit message:*\n" + $lastCommitMessageLink + "\n ")
                             },
                             {
                                 "type": "mrkdwn",
-                                "text": ("*Assignee:*\n<" + $authorSlackId + ">" + "\n")
+                                "text": ("*Assignee:*\n<" + $authorSlackId + ">" + "\n ")
                             },
                             {
                                 "type": "mrkdwn",
-                                "text": ("*Start time of workflow:*\n" + $workflowStartTime + "\n")
+                                "text": ("*Start time of workflow:*\n" + $workflowStartTime + "\n ")
                             }
                             ]
                         }
