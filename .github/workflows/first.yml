@@ -36,7 +36,7 @@ jobs:
     catch-error:
         needs: [first-job,third-job,fourth-job]
         if: ${{ failure() }}
-        runs-on: ubuntu-lastest
+        runs-on: ubuntu-latest
         steps:
             - run: |
                 echo "catch error"
