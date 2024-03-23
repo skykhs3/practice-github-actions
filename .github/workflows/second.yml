@@ -13,6 +13,9 @@ on:
             LAST_COMMIT_AUTHOR:
                 required: true
                 type: string
+            LAST_COMMIT_MESSAGE:
+                required: true
+                type: string
             WORKFLOW_START_TIME:
                 required: true
                 type: string
@@ -47,6 +50,11 @@ jobs:
                 workflowName="${{ inputs.WORKFLOW_NAME }}"
                 readableWorkflowStartTime=$(TZ='Asia/Seoul' date -d @${{ inputs.WORKFLOW_START_TIME }} '+%Y-%m-%d %H:%M:%S')
                 lastCommitAuthor="${{ inputs.LAST_COMMIT_AUTHOR }}"
+
+                lastCommitMessage=$(jq -n \
+                    --arg cm "${{ inputs.LAST_COMMIT_MESSAGE }}" \
+                    '($cm)')
+
                 repositoryName="${{ inputs.REPOSITORY_NAME }}"
                 branchName="${{ inputs.BRANCH_NAME }}"
                 githubRunId="${{ inputs.GITHUB_RUN_ID }}"
@@ -63,6 +71,7 @@ jobs:
                 jsonPayload=$(jq -n \
                 --arg workflowName "$workflowName" \
                 --arg lastCommitAuthor "$lastCommitAuthor" \
+                --arg lastCommitMessage "$lastCommitMessage" \
                 --arg workflowStartTime "$readableWorkflowStartTime" \
                 --arg repositoryName "$repositoryName" \
                 --arg branchName "$branchName" \
@@ -111,6 +120,10 @@ jobs:
                             {
                                 "type": "mrkdwn",
                                 "text": ("*Start time of workflow:*\n" + $workflowStartTime)
+                            },
+                            {
+                                "type": "mrkdwn"
+                                "text": ($lastCommitMessage)
                             }
                             ]
                         }
