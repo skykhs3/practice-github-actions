@@ -42,7 +42,7 @@ jobs:
             WORKFLOW_START_TIME: ${{github.event.repository.pushed_at}}
             WORKFLOW_NAME: ${{ github.workflow }}
             DEPLOYMENT_STATUS: "Succeeded"
-            FAIL_REASON: "N/A"
+            FAIL_REASONS: ""
             MESSAGE_COLOR: "#28A745"
 
     failure-slack-message:

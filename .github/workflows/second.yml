@@ -39,7 +39,7 @@ on:
                 default: "Failed"
             FAIL_REASONS:
                 type: string
-                default: ""
+                default: "unknown error occurred"
             MESSAGE_COLOR:
                 type: string
                 default: "#CB2431"
