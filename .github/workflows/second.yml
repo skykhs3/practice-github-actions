@@ -85,7 +85,7 @@ jobs:
                         "type": "section",
                         "text": {
                         "type": "mrkdwn",
-                        "text": ("Github Actions: " + $workflowNameLink + " " + $deploymentStatus + " on " + $branchName)
+                        "text": ("Github Actions: " + $workflowNameLink + " " + $deploymentStatus + " on " + $branchName + $failReasons)
                         }
                     }
                     ],
@@ -97,7 +97,7 @@ jobs:
                             "type": "header",
                             "text": {
                             "type": "plain_text",
-                            "text": $deploymentStatus
+                            "text": $deploymentStatus + $failReasons
                             }
                         },
                         {
@@ -105,19 +105,19 @@ jobs:
                             "fields": [
                             {
                                 "type": "mrkdwn",
-                                "text": ("*Workflow:*\n" + $workflowNameLink + "\n" + $failReasons),
+                                "text": ("*Workflow:*\n" + $workflowNameLink + "\n"),
                             },
                             {
                                 "type": "mrkdwn",
-                                "text": ("*Last commit message:*\n" + $lastCommitMessageLink)
+                                "text": ("*Last commit message:*\n" + $lastCommitMessageLink + "\n")
                             },
                             {
                                 "type": "mrkdwn",
-                                "text": ("*Assignee:*\n<" + $authorSlackId + ">")
+                                "text": ("*Assignee:*\n<" + $authorSlackId + ">" + "\n")
                             },
                             {
                                 "type": "mrkdwn",
-                                "text": ("*Start time of workflow:*\n" + $workflowStartTime)
+                                "text": ("*Start time of workflow:*\n" + $workflowStartTime + "\n")
                             }
                             ]
                         }

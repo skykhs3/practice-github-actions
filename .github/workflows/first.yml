@@ -9,6 +9,8 @@ jobs:
         steps:
             - run: |
                 echo "this is first-job"
+        outputs:
+            failure-reasons: "because of first-job error"
     second-job:
         needs: first-job
         runs-on: ubuntu-latest
@@ -17,13 +19,15 @@ jobs:
                 echo "this is third-job"
                 exit 1
         outputs:
-            failure-reasons: "Because of ${{job.container.id}}"
+            failure-reasons: "because of second-job error"
     third-job:
         needs: second-job
         runs-on: ubuntu-latest
         steps:
             - run: |
                 echo "this is fourth-job"
+        outputs: 
+            failure-reasons: "because of third-job error"
 
     success-slack-message:
         needs: [first-job,second-job,third-job]
