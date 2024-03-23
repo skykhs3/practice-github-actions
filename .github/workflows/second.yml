@@ -48,12 +48,14 @@ jobs:
             - name: Make payload and send
               run: |
                 workflowName="${{ inputs.WORKFLOW_NAME }}"
+
                 readableWorkflowStartTime=$(TZ='Asia/Seoul' date -d @${{ inputs.WORKFLOW_START_TIME }} '+%Y-%m-%d %H:%M:%S')
+
                 lastCommitAuthor="${{ inputs.LAST_COMMIT_AUTHOR }}"
 
                 lastCommitMessage=$(jq -n \
                     --arg cm "${{ inputs.LAST_COMMIT_MESSAGE }}" \
-                    '($cm) | .[1:-1]')
+                    '($cm)')
 
                 repositoryName="${{ inputs.REPOSITORY_NAME }}"
                 branchName="${{ inputs.BRANCH_NAME }}"
@@ -63,11 +65,14 @@ jobs:
                 deploymentStatus="${{ inputs.DEPLOYMENT_STATUS }}"
                 failReason="${{ inputs.FAIL_REASON }}"
 
-                # your comment
+                # Your slack id mapping table should be in Github secrets
                 authorSlackId=$(echo '${{ secrets.SLACK_ID_MAPPING_TABLE }}' | jq -r --arg key "${{ inputs.LAST_COMMIT_AUTHOR }}" '.[$key]')
                 if [ -z "$authorSlackId" ] || [ "$authorSlackId" == "null" ]; then
                 authorSlackId="${{ inputs.LAST_COMMIT_AUTHOR }}"
                 fi
+
+                echo "authorSlackId: $lastCommitMessage"
+                
                 jsonPayload=$(jq -n \
                 --arg workflowName "$workflowName" \
                 --arg lastCommitAuthor "$lastCommitAuthor" \
@@ -111,15 +116,15 @@ jobs:
                             },
                             {
                                 "type": "mrkdwn",
+                                "text": ("*Last commit message:*\n" + $lastCommitMessage)
+                            },
+                            {
+                                "type": "mrkdwn",
                                 "text": ("*Assignee:*\n<" + $authorSlackId + ">")
                             },
                             {
                                 "type": "mrkdwn",
                                 "text": ("*Start time of workflow:*\n" + $workflowStartTime)
-                            },
-                            {
-                                "type": "mrkdwn",
-                                "text": ("*Last commit message:*\n" + $lastCommitMessage)
                             }
                             ]
                         }
