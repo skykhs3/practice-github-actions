@@ -38,10 +38,10 @@ on:
                 type: string
 
 jobs:
-    second-job:
+    send-messages-to-slack:
         runs-on: ubuntu-latest
         steps:
-            - name: Make payload
+            - name: Make payload and send
               run: |
                 workflowName="${{ inputs.WORKFLOW_NAME }}"
                 readableWorkflowStartTime=$(TZ='Asia/Seoul' date -d @${{ inputs.WORKFLOW_START_TIME }} '+%Y-%m-%d %H:%M:%S')

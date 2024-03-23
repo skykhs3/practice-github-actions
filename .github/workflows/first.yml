@@ -22,13 +22,13 @@ jobs:
             FAIL_REASON: "N/A"
     third-job:
         needs: first-job
-        runs-on: ubuntu-lasted
+        runs-on: ubuntu-latest
         steps:
             - run: |
                 echo "this is third-job"
     fourth-job:
         needs: third-job
-        runs-on: ubuntu-lasted
+        runs-on: ubuntu-latest
         steps:
             - run: |
                 echo "this is fourth-job"
