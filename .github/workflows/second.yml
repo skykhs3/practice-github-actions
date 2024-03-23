@@ -51,18 +51,11 @@ jobs:
             - name: Create json payload and send it to slack
               run: |
                 workflowName="${{ inputs.WORKFLOW_NAME }}"
-
                 readableWorkflowStartTime=$(TZ='Asia/Seoul' date -d @${{ inputs.WORKFLOW_START_TIME }} '+%Y-%m-%d %H:%M:%S')
-
                 lastCommitAuthor="${{ inputs.LAST_COMMIT_AUTHOR }}"
-
-                lastCommitMessage=$(jq -n \
-                    --arg lcm "${{ inputs.LAST_COMMIT_MESSAGE }}" \
-                    '($lcm)')
+                lastCommitMessage=$(jq -n --arg lcm "${{ inputs.LAST_COMMIT_MESSAGE }}" '($lcm)')
                 lastCommitMessage="${lastCommitMessage:1:-1}"
-
                 lastCommitId="${{ inputs.LAST_COMMIT_ID }}"
-
                 repositoryName="${{ inputs.REPOSITORY_NAME }}"
                 branchName="${{ inputs.BRANCH_NAME }}"
                 githubRunId="${{ inputs.GITHUB_RUN_ID }}"
@@ -72,17 +65,12 @@ jobs:
                 failReason="${{ inputs.FAIL_REASON }}"
 
                 # Your slack id mapping table should be in Github secrets
-                authorSlackId=$(echo '${{ secrets.SLACK_ID_MAPPING_TABLE }}' | jq -r --arg key "${{ inputs.LAST_COMMIT_AUTHOR }}" '.[$key]')
-                if [ -z "$authorSlackId" ] || [ "$authorSlackId" == "null" ]; then
-                authorSlackId="${{ inputs.LAST_COMMIT_AUTHOR }}"
-                fi
-
-                echo "authorSlackId: $lastCommitMessage"
+                authorSlackId=$(echo '${{ secrets.SLACK_ID_MAPPING_TABLE }}' | jq -r --arg key "$lastCommitAuthor" '.[$key] // $key')
 
                 jsonPayload=$(jq -n \
-                --arg workflowName "$workflowName" \
+                --arg workflowNameLink "<https://github.com/$repositoryName/actions/runs/$githubRunId|$workflowName #$githubRunNumber>" \
                 --arg lastCommitAuthor "$lastCommitAuthor" \
-                --arg lastCommitMessage "$lastCommitMessage" \
+                --arg lastCommitMessageLink "<https://github.com/$repositoryName/commit/$lastCommitId|$lastCommitMessage>" \
                 --arg lastCommitId "$lastCommitId" \
                 --arg workflowStartTime "$readableWorkflowStartTime" \
                 --arg repositoryName "$repositoryName" \
@@ -99,7 +87,7 @@ jobs:
                         "type": "section",
                         "text": {
                         "type": "mrkdwn",
-                        "text": ("Github Actions: <https://github.com/" + $repositoryName + "/actions/runs/" + $githubRunId + "|" + $workflowName + " #" + $githubRunNumber + "> "+ $deploymentStatus + " on " + $branchName)
+                        "text": ("Github Actions: " + $workflowNameLink + " " + $deploymentStatus + " on " + $branchName)
                         }
                     }
                     ],
@@ -119,11 +107,11 @@ jobs:
                             "fields": [
                             {
                                 "type": "mrkdwn",
-                                "text": ("*Workflow:*\n" + "<https://github.com/" + $repositoryName + "/actions/runs/" + $githubRunId + "|" + $workflowName + " #" + $githubRunNumber + ">"),
+                                "text": ("*Workflow:*\n" + $workflowNameLink),
                             },
                             {
                                 "type": "mrkdwn",
-                                "text": ("*Last commit message:*\n" + "<https://github.com/" + $repositoryName + "/commit/"+ $lastCommitId +"|" +$lastCommitMessage + ">")
+                                "text": ("*Last commit message:*\n" + $lastCommitMessageLink)
                             },
                             {
                                 "type": "mrkdwn",
