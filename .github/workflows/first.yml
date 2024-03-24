@@ -11,7 +11,7 @@ jobs:
                 echo "this is first-job"
                 exit 0
         outputs:
-            failure-reasons: "because of first-job error"
+            failure-reasons: "first-job error "
     second-job:
         needs: first-job
         runs-on: ubuntu-latest
@@ -20,7 +20,7 @@ jobs:
                 echo "this is third-job"
                 exit 0
         outputs:
-            failure-reasons: "because of second-job error"
+            failure-reasons: "second-job error "
     third-job:
         needs: second-job
         runs-on: ubuntu-latest
@@ -29,7 +29,7 @@ jobs:
                 echo "this is fourth-job"
                 exit 0
         outputs: 
-            failure-reasons: "because of third-job error"
+            failure-reasons: "third-job error "
 
     success-slack-message:
         needs: third-job
@@ -70,7 +70,7 @@ jobs:
             WORKFLOW_START_TIME: ${{github.event.repository.pushed_at}}
             WORKFLOW_NAME: ${{ github.workflow }}
             DEPLOYMENT_STATUS: "Failed"
-            FAIL_REASONS: "${{needs.first-job.outputs.failure-reasons}} ${{needs.second-job.outputs.failure-reasons}} ${{needs.third-job.outputs.failure-reasons}}"
+            FAIL_REASONS: ""
             MESSAGE_COLOR: "#CB2431"
 
 

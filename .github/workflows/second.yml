@@ -36,18 +36,19 @@ on:
                 type: string
             DEPLOYMENT_STATUS:
                 type: string
-                default: "Failed"
+                default: "Succeeded"
             FAIL_REASONS:
                 type: string
-                default: "unknown error occurred"
+                default: ""
             MESSAGE_COLOR:
                 type: string
-                default: "#CB2431"
+                default: "#28A745"
 jobs:
     send-messages-to-slack:
         runs-on: ubuntu-latest
         steps:
-            - run: |    
+            - name: Send the messages to Slack
+              run: |    
                 branchName="${{ inputs.BRANCH_NAME }}"
                 githubRunId="${{ inputs.GITHUB_RUN_ID }}"
                 githubRunNumber="${{ inputs.GITHUB_RUN_NUMBER }}"
@@ -124,6 +125,7 @@ jobs:
                     }
                     ]
                 }')
+                
                 curl -X POST -H 'Content-type: application/json' --data "$jsonPayload" ${{ secrets.SLACK_WEBHOOK_URL }}
 
 
