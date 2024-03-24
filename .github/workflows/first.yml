@@ -27,6 +27,7 @@ jobs:
         steps:
             - run: |
                 echo "this is fourth-job"
+                exit 1
         outputs: 
             failure-reasons: "because of third-job error"
 
@@ -51,7 +52,7 @@ jobs:
             MESSAGE_COLOR: "#28A745"
 
     failure-slack-message:
-        needs: [first-job,second-job,third-job]
+        needs: [third-job]
         if: ${{ failure() }}
         
         uses: ./.github/workflows/second.yml
