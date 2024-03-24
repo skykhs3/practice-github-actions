@@ -18,7 +18,7 @@ jobs:
         steps:
             - run: |
                 echo "this is third-job"
-                exit 1
+                exit 0
         outputs:
             failure-reasons: "because of second-job error"
     third-job:
@@ -32,7 +32,7 @@ jobs:
             failure-reasons: "because of third-job error"
 
     success-slack-message:
-        needs: [first-job,second-job,third-job]
+        needs: third-job
         uses: ./.github/workflows/second.yml
         secrets:
             SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
